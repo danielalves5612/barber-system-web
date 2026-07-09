@@ -1,10 +1,12 @@
+import AppRoutes from "./routes/AppRoutes"
+import { BrowserRouter } from "react-router-dom"
 
 function App() {
 
   return (
-    <div>
-      <h1>Barber System</h1>
-    </div>
+      <BrowserRouter>
+        <AppRoutes/>
+      </BrowserRouter>
   )
 }
 
