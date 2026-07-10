@@ -5,11 +5,13 @@ import Services from "../pages/Services/Services"
 import Photos from "../pages/Photos/Photos"
 import Appointments from "../pages/Appointments/Appointments"
 import DashBoardLayout from "../layouts/DashboardLayout"
+import Register from "../pages/Register/Register";
 
 function AppRoutes(){
     return(
         <Routes>
             <Route path="/" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
             <Route path="/dashboard" element={<DashBoardLayout><Dashboard/></DashBoardLayout>}/>
             <Route path="/services" element={<DashBoardLayout><Services/></DashBoardLayout>}/>
             <Route path="/photos" element={<DashBoardLayout><Photos/></DashBoardLayout>}/>
