@@ -34,7 +34,7 @@ function LoginForm(){
                 </div>
             </div>
             <button type="submit" className="button-submit">Entrar</button>
-            <p className="register-text">Não tem uma conta? <Link to="/register">Criar conta</Link></p>
+            <p className="auth-link">Não tem uma conta? <Link to="/register">Criar conta</Link></p>
         </form>
     )
 }

@@ -1,6 +1,6 @@
 .form{
     display: flex;
-    width: min(100%, 420px);
+    width: min(100%, 520px);
     flex-direction: column;
     gap: 24px;
     background-color: rgba(31, 41, 55, .85);
@@ -48,10 +48,24 @@
     color: var(--color-text-muted);
 }
 
+.form-row, .form-grou{
+    flex: 1;
+    min-width: 0;
+}
+
+.form-row .input-wrapper, .form-row input{
+    width: 100%;
+}
+
 .form-group{
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.form-row{
+    display: flex;
+    gap: 20px;
 }
 
 .button-submit{
@@ -146,12 +160,16 @@
         font-size: 1.7rem;
     }
 
+    .form-row{
+        flex-direction: column;
+    }
+
     .form input,
     .button-submit {
         height: 48px;
     }
 
-    .register-text {
+    .login-text {
         font-size: .85rem;
     }
 }

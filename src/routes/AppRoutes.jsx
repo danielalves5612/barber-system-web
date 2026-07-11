@@ -4,7 +4,7 @@ import Dashboard from "../pages/Dashboard/Dashboard"
 import Services from "../pages/Services/Services"
 import Photos from "../pages/Photos/Photos"
 import Appointments from "../pages/Appointments/Appointments"
-import DashBoardLayout from "../layouts/DashboardLayout"
+import DashBoardLayout from "../layouts/DashboardLayout/DashboardLayout"
 import Register from "../pages/Register/Register";
 
 function AppRoutes(){
