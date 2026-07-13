@@ -6,13 +6,14 @@ import Photos from "../pages/Photos/Photos"
 import Appointments from "../pages/Appointments/Appointments"
 import DashBoardLayout from "../layouts/DashboardLayout/DashboardLayout"
 import Register from "../pages/Register/Register";
+import PrivateRoute from "./PrivateRoute";
 
 function AppRoutes(){
     return(
         <Routes>
             <Route path="/" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
-            <Route path="/dashboard" element={<DashBoardLayout><Dashboard/></DashBoardLayout>}/>
+            <Route path="/dashboard" element={<PrivateRoute><DashBoardLayout><Dashboard/></DashBoardLayout></PrivateRoute>}/>
             <Route path="/services" element={<DashBoardLayout><Services/></DashBoardLayout>}/>
             <Route path="/photos" element={<DashBoardLayout><Photos/></DashBoardLayout>}/>
             <Route path="/appointments" element={<DashBoardLayout><Appointments/></DashBoardLayout>}/>
