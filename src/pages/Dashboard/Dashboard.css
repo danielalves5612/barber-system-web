@@ -1,0 +1,424 @@
+.dashboard-page{
+    display: grid;
+    padding: 30px;
+    gap: 20px;
+}
+
+.dashboard-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-header-left{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sidebar-toggle,
+.notification-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+
+.sidebar-toggle:hover,
+.notification-button:hover{
+    background-color: var(--color-surface);
+}
+
+.notification-button{
+    position: relative;
+}
+
+.notification-badge{
+    position: absolute;
+    top: -6px;
+    right: -7px;
+
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 999px;
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    font-size: .7rem;
+}
+
+.dashboard-summary,
+.dashboard-main-grid,
+.dashboard-bottom-grid{
+    gap: 20px;
+}
+
+.dashboard-summary{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.summary-card,
+.dashboard-revenue,
+.dashboard-appointments,
+.dashboard-top-services,
+.dashboard-sales-by-category,
+.dashboard-low-stock {
+    background-color: #172033;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(148, 163, 184, .18);
+    box-shadow: 0   12px 30px rgba(2, 6, 23, .22);
+}
+
+.summary-card{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 130px;
+}
+
+.summary-content{
+    min-width: 0;
+    display: grid;
+    grid-template-rows: 20px 32px 20px;
+    align-items: center;
+    row-gap: 5px;
+}
+
+.summary-icon{
+    height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-color: var(--color-primary-hover);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-text);
+}
+
+.summary-value{
+    display: block;
+    margin: 0;
+
+    font-size: 1.7rem;
+    line-height: 32px;
+}
+
+.summary-label{
+    color: var(--color-text-muted);
+    font-size: .9rem;
+    line-height: 20px;
+    white-space: nowrap;
+}
+
+.dashboard-revenue,
+.dashboard-appointments{
+    min-height: 350px;
+}
+
+.dashboard-revenue{
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-top-services,
+.dashboard-sales-by-category,
+.dashboard-low-stock{
+    min-height: 250px;
+}
+
+.dashboard-low-stock{
+    display: flex;
+    flex-direction: column;
+}
+
+.manage-products-button{
+    align-self: center;
+    margin-top: auto;
+
+    padding: 10px 18px;
+    border: 1px solid var(--color-primary);
+    border-radius: 10px;
+
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.dashboard-main-grid{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.dashboard-bottom-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.dashboard-appointments{
+    display: flex;
+    flex-direction: column;
+}
+
+.revenue-header,
+.appointments-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.revenue-header h2,
+.appointments-header h2{
+    font-size: 1.35rem;
+    line-height: 1.2;
+}
+
+.revenue-summary {
+    display: flex;
+    flex-direction: column;
+    margin-top: 18px;
+}
+
+.revenue-summary strong{
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.revenue-period{
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.revenue-chart{
+    width: 100%;
+    height: 310px;
+    margin-top: 24px;
+
+    color: var(--color-text-muted);
+}
+
+.appointments-header button{
+    margin-left: 16px;
+}
+
+.appointments-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.appointment-item {
+    display: grid;
+    grid-template-columns: 56px 36px minmax(110px, 1fr) minmax(100px, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.appointment-avatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.appointment-client,
+.appointment-service {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.appointments-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: .9rem;
+    white-space: nowrap;
+}
+
+.appointments-link:hover{
+    text-decoration: underline;
+}
+
+.appointment-status{
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.appointment-status.confirmed{
+    background-color: rgba(34, 197, 94, .15);
+    color: #4ade80;
+}
+
+.appointment-status.pending{
+    background-color: rgba(250, 204, 21, .15);
+    color: #facc15;
+}
+
+.appointment-status.canceled{
+    background-color: rgba(239, 68, 68, .15);
+    color: #f87171;
+}
+
+.new-appointment-button{
+    align-self: center;
+    margin-top: auto;
+    padding: 10px 18px;
+
+    border: 1px solid var(--color-primary);
+    border-radius: 10px;
+    background-color: transparent;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.dashboard-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.dashboard-card-header h2 {
+    font-size: 1.15rem;
+    line-height: 1.2;
+}
+
+.dashboard-card-header a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: .85rem;
+    white-space: nowrap;
+}
+
+.dashboard-card-header a:hover {
+    text-decoration: underline;
+}
+
+.top-services-chart,
+.sales-chart {
+    width: 100%;
+    height: 230px;
+    margin-top: 18px;
+}
+
+.low-stock-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 18px;
+}
+
+.low-stock-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.low-stock-item:last-child {
+    border-bottom: none;
+}
+
+.low-stock-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.low-stock-info span {
+    color: var(--color-text-muted);
+    font-size: .8rem;
+}
+
+.low-stock-quantity {
+    color: var(--color-danger);
+    font-size: .85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.revenue-change{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 18px;
+}
+
+.revenue-change-value{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    font-weight: 600;
+}
+
+.revenue-change-value.positive{
+    color: var(--color-primary);
+}
+
+.revenue-change-value.negative{
+    color: var(--color-danger);
+}
+
+.revenue-change-text{
+    color: var(--color-text-muted);
+    font-size: .85rem;
+}
+
+.summary-change{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin: 0;
+    min-height: 20px;
+    font-size: .8rem;
+}
+
+.summary-change-value{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    font-weight: 600;
+}
+
+.summary-change-value.positive{
+    color: var(--color-primary);
+}
+
+.summary-change-value.negative{
+    color: var(--color-danger);
+}
+
+.summary-change-text{
+    color: var(--color-text-muted);
+    font-size: .85rem;
+}
