@@ -1,14 +1,64 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
+import api from "../../services/api"
 import "./RegisterForm.css"
 
 function RegisterForm(){
     const [showPassword, setShowPassword] = useState(false)
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
 
-    function handleSubmit(event){
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+    const [password, setPassword] = useState('')
+    const [passwordConfirm, setPasswordConfirm] = useState('')
+
+    const navigate = useNavigate()
+
+    async function handleSubmit(event){
         event.preventDefault()
+
+        console.log({
+            name,
+            email,
+            phone,
+            password,
+            passwordConfirm
+        })
+        
+        if(!name || !email || !phone || !password || !passwordConfirm){
+            toast.error('Preencha todos os campos.')
+            return
+        }
+
+        if(password !== passwordConfirm){
+            toast.error("As senhas precisam ser iguais.")
+            return
+        }
+
+        try{
+            await api.post('/users', {
+                nome: name,
+                email: email,
+                telefone: phone,
+                password: password
+            })
+
+            toast.success("Usuário criado com sucesso, faça login.")
+
+            navigate('/')
+        }catch(e){
+            const erro = e.response?.data?.errors
+
+            if(!erro){
+                toast.error('Erro ao criar cadastro. Tente novamente')
+            }
+
+            erro.forEach((err) => toast.error(err))
+        }
     }
 
     return (
@@ -19,7 +69,14 @@ function RegisterForm(){
                 <label htmlFor="name">Nome completo</label>
                 <div className="input-wrapper">
                     <User className="input-icon" size={20}/>
-                    <input type="text" name="name" id="name" placeholder="Digite o seu nome" />
+                    <input 
+                        value={name} 
+                        onChange={(event) => setName(event.target.value)} 
+                        type="text" 
+                        name="name" 
+                        id="name" 
+                        placeholder="Digite o seu nome" 
+                    />
                 </div>
             </div>
             <div className="form-row">
@@ -27,7 +84,9 @@ function RegisterForm(){
                     <label htmlFor="email">E-mail</label>
                     <div className="input-wrapper">
                         <Mail className="input-icon" size={20}/>
-                        <input 
+                        <input
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
                             type="email" 
                             name="email" 
                             id="email" 
@@ -43,6 +102,8 @@ function RegisterForm(){
                     <div className="input-wrapper">
                         <Phone className="input-icon" size={20} />
                         <input
+                            value={phone}
+                            onChange={(event) => setPhone(event.target.value)}
                             type="tel"
                             name="phone"
                             id="phone"
@@ -57,7 +118,9 @@ function RegisterForm(){
                 <label htmlFor="password">Senha</label>
                 <div className="password-input-wrapper">
                     <Lock className="input-icon" size={20}/>
-                    <input 
+                    <input
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)} 
                         type={showPassword ? 'text' : 'password'} 
                         name="password" id="password" 
                         placeholder="Digite a sua senha" 
@@ -76,7 +139,9 @@ function RegisterForm(){
                 <label htmlFor="password-confirm">Confirmar senha</label>
                 <div className="password-input-wrapper">
                     <Lock className="input-icon" size={20}/>
-                    <input 
+                    <input
+                        value={passwordConfirm}
+                        onChange={(event) => setPasswordConfirm(event.target.value)} 
                         type={showPasswordConfirm ? 'text' : 'password'} 
                         name="passwordConfirm" id="passwordConfirm" 
                         placeholder="Confirme a sua senha" 
