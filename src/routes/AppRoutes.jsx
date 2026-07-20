@@ -16,7 +16,7 @@ function AppRoutes(){
             <Route path="/dashboard" element={<PrivateRoute><DashBoardLayout><Dashboard/></DashBoardLayout></PrivateRoute>}/>
             <Route path="/services" element={<DashBoardLayout><Services/></DashBoardLayout>}/>
             <Route path="/photos" element={<DashBoardLayout><Photos/></DashBoardLayout>}/>
-            <Route path="/appointments" element={<DashBoardLayout><Appointments/></DashBoardLayout>}/>
+            <Route path="/appointments" element={<PrivateRoute><DashBoardLayout><Appointments/></DashBoardLayout></PrivateRoute>}/>
         </Routes>
     )
 }

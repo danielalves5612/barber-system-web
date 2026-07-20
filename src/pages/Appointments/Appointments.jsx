@@ -1,8 +1,232 @@
-import { Plus, Search, Clock3, Scissors, Eye, Pencil, CircleX, ChevronLeft, ChevronRight } from "lucide-react"
+import { Plus, ChevronLeft, ChevronRight } from "lucide-react"
+import { useState, useEffect } from "react"
+import { toast } from "react-toastify"
 import PhotoDaniel from "../../assets/images/foto-de-perfil.jpeg"
+import api from "../../services/api"
+import AppointmentViewModal from "../../components/AppointmentViewModal"
+import AppointmentFormModal from "../../components/AppointmentFormModal"
+import AppointmentFilters from "../../components/AppointmentFilters"
+import AppointmentsTable from "../../components/AppointmentsTable"
+import formatters from "../../utils/formatters"
 import "./Appointments.css"
 
 function Appointments(){
+
+    const [appointments, setAppointments] = useState([])
+    const [showModal, setShowModal] = useState(false)
+
+    const [data, setData] = useState('')
+    const [hora, setHora] = useState('')
+
+    const [clienteId, setClienteId] = useState('')
+    const [barbeiroId, setBarbeiroId] = useState('')
+    const [serviceId, setServiceId] = useState('')
+    const [status, setStatus] = useState('')
+
+    const [users, setUsers] = useState([])
+    const [services, setServices] = useState([])
+
+    const [editingAppointment, setEditingAppointment] = useState(null)
+    const [viewAppointment, setViewAppointment] = useState(null)
+
+    const [search, setSearch] = useState('')
+    const [filterStatus, setFilterStatus] = useState("all")
+    const [filterBarbeiro, setFilterBarbeiro] = useState("all")
+    const [filterData, setFilterData] = useState('')
+
+    async function getAppointments(){
+        try{
+            const response = await api.get("/appointments")
+
+            const appointment = response.data
+
+            setAppointments(appointment)
+        }catch(e){
+            const message = e.response?.data?.errors?.[0] || "Falha ao criar agendamentos"
+            toast.error(message)
+        }
+    }
+
+    useEffect(() => {
+
+        getAppointments()
+
+    }, [])
+
+    useEffect(() => {
+        async function getUsers(){
+            try{
+                const response = await api.get('/users')
+
+                const users = response.data
+
+                setUsers(users)
+
+            }catch(e){
+                const message = e.response?.data?.errors?.[0] || "Falha ao carregar usuários"
+                toast.error(message)
+            }
+        }
+
+        getUsers()
+
+    }, [])
+
+    useEffect(() => {
+        async function getServices(){
+            try{
+                const response = await api.get('/services')
+
+                const services = response.data
+
+                setServices(services)
+
+            }catch(e){
+                const message = e.response?.data?.errors?.[0] || "Falha ao carregar serviços"
+                toast.error(message)
+            }
+        }
+
+        getServices()
+
+    }, [])
+
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [search, filterStatus, filterBarbeiro, filterData])
+
+    async function handleSubmit(event){
+        event.preventDefault()
+
+        if(!data || !hora || !clienteId || !serviceId || !barbeiroId){
+            return toast.error('Todos os campos são obrigatórios')
+        }
+
+        if(editingAppointment){
+            try{
+                await api.put(`/appointments/${editingAppointment.id}`, {
+                    data,
+                    hora,
+                    cliente_id: clienteId,
+                    barbeiro_id: barbeiroId,
+                    service_id: serviceId,
+                    status,
+                })
+
+                toast.success("Agendamento editado com sucesso")
+
+                handleCloseModal()
+                
+                getAppointments()
+            }catch(e){
+                const message = e.response?.data?.errors?.[0] || "Falha ao editar agendamento"
+                toast.error(message)
+            }
+
+        }else{
+
+            try{
+                await api.post("/appointments", {
+                    data,
+                    hora,
+                    cliente_id: clienteId,
+                    barbeiro_id: barbeiroId,
+                    service_id: serviceId
+                })
+
+                toast.success('Agendamento criado com sucesso')
+
+                handleCloseModal()
+
+                getAppointments()
+
+            }catch(e){
+                const message = e.response?.data?.errors?.[0] || "Falha ao criar agendamento"
+                toast.error(message)
+            }
+        }
+
+    }
+    
+    function handleViewClick(appointment){
+        setViewAppointment(appointment)
+    }
+
+    async function handleEditClick(appointment){
+        setEditingAppointment(appointment)
+
+        setData(appointment.data)
+        setHora(appointment.hora)
+        setClienteId(appointment.cliente.id)
+        setBarbeiroId(appointment.barbeiro.id)
+        setServiceId(appointment.service.id)
+        setStatus(appointment.status)
+
+        setShowModal(true)
+
+    }
+
+    async function handleClickCancel(appointment){
+        try{
+            await api.put(`/appointments/${appointment.id}`, { status: 'cancelado'})
+
+            toast.success("Agendamento cancelado com sucesso")
+
+            getAppointments()
+        }catch(e){
+                const message = e.response?.data?.errors?.[0] || "Falha ao cancelar agendamento"
+                toast.error(message)
+        }
+
+    }
+
+    const filteredAppointments = appointments.filter((appointment) => {
+        const searchText = search.toLowerCase()
+
+        const matchNome = appointment.cliente.nome.toLowerCase().includes(searchText)
+        const matchNomeBarbeiro = appointment.barbeiro.nome.toLowerCase().includes(searchText)
+        const matchService = appointment.service.nome.toLowerCase().includes(searchText)
+
+        const matchStatus = filterStatus === "all" || appointment.status === filterStatus
+
+        const matchBarbeiro = filterBarbeiro === appointment.barbeiro.nome || filterBarbeiro === "all"
+
+        const matchData = filterData === appointment.data || filterData === ""
+
+        return (matchNome || matchNomeBarbeiro || matchService) && matchStatus && matchBarbeiro && matchData
+               
+    })
+
+    function handleClickClearFilter(){
+        setSearch('')
+        setFilterStatus("all")
+        setFilterBarbeiro("all")
+        setFilterData("")
+    }
+
+    function handleCloseModal(){
+        setShowModal(false)
+        setData("")
+        setHora("")
+        setClienteId("")
+        setBarbeiroId("")
+        setServiceId("")
+        setStatus("")
+        setEditingAppointment(null)
+    }
+
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const totalPages = Math.ceil(filteredAppointments.length / 5)
+
+    const startIndex = (currentPage - 1) * 5
+
+    const endIndex = (startIndex + 5)
+
+    const arrayPages = filteredAppointments.slice(startIndex, endIndex)
+
+    const arrayPagesButton = Array.from({ length: totalPages}, (_, index) => (index + 1))
+
     return (
         <section className="appointments-page">
 
@@ -13,415 +237,63 @@ function Appointments(){
                     <p>Gerencie todos os agendamentos da barbearia</p>
                 </div>
 
-                <button className="new-appointment-button"><Plus/>Novo agendamento</button>
+                <button onClick={() => setShowModal(true)} className="new-appointment-button"><Plus/>Novo agendamento</button>
             </section>
 
-            <section className="appointments-filters">
+            <AppointmentFilters
+                search={search}
+                setSearch={setSearch}
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
+                filterBarbeiro={filterBarbeiro}
+                setFilterBarbeiro={setFilterBarbeiro}
+                users={users}
+                handleClickClearFilter={handleClickClearFilter}
+                filterData={filterData}
+                setFilterData={setFilterData}
+            />
 
-                <div className="appointments-search">
-                    <Search/>
-                    <input 
-                        className="search-box" 
-                        type="text" 
-                        name="search" 
-                        id="search" 
-                        placeholder="Buscar por cliente, barbeiro ou serviço"/>
-                </div>
+            <AppointmentsTable
+                arrayPages={arrayPages}
+                handleViewClick={handleViewClick}
+                handleEditClick={handleEditClick}
+                handleClickCancel={handleClickCancel}
+                startIndex={startIndex}
+                endIndex={endIndex}
+                filteredAppointments={filteredAppointments}
+                arrayPagesButton={arrayPagesButton}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+            />
 
-                <div className="appointments-filter">
-                    <label htmlFor="status">Status</label>
-                    <select name="status" id="status">
-                        <option value="all">Todos</option>
-                        <option value="agendado">Agendado</option>
-                        <option value="confirmado">Confirmado</option>
-                        <option value="cancelado">Cancelado</option>
-                    </select>
-                </div>
+            {viewAppointment && 
+                <AppointmentViewModal
+                    viewAppointment={viewAppointment}
+                    setViewAppointment={setViewAppointment}
+                />
+            }
 
-                <div className="appointments-filter">
-                    <label htmlFor="barber">Barbeiro</label>
-                    <select name="barber" id="barber">
-                        <option value="all">Todos</option>
-                    </select>
-                </div>
-
-                <div className="appointments-filter">
-                    <label htmlFor="date">Data</label>
-                    <input type="date" name="date" id="date" />
-                </div>
-
-                <div className="appointments-filter-actions">
-                    <button type="button">Limpar Filtros</button>
-                </div>
-            </section>
-
-            <section className="appointments-table-container">
-                <div className="appointments-table-header">
-                    <span>Horário</span>
-                    <span>Cliente</span>
-                    <span>Barbeiro</span>
-                    <span>Serviço</span>
-                    <span>Status</span>
-                    <span>Ações</span>
-                </div>
-
-                <div className="appointments-table-body">
-                    <div className="appointment-row">
-                        <div className="appointments-date-time">
-                            <Clock3 size={18} />
-
-                            <div className="appointments-date-time-info">
-                                <strong>09:00</strong>
-                                <span>20/07/2026</span>
-                            </div>
-                        </div>
-
-                        <div className="appointments-client">
-                            <img
-                                src={PhotoDaniel}
-                                alt="Foto do cliente Daniel"
-                                className="appointments-client-avatar"
-                            />
-
-                            <div className="appointments-client-info">
-                                <strong>Daniel Alves</strong>
-                                <span>(11) 99999-9999</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-barber">Gabriel Oliveira Santos</span>
-
-                        <div className="appointments-service">
-                            <Scissors size={18} />
-
-                            <div className="appointments-service-info">
-                                <strong>Corte + Barba</strong>
-                                <span>50 minutos</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-status confirmed">
-                            Confirmado
-                        </span>
-
-                        <div className="appointments-actions">
-                            <button
-                                type="button"
-                                title="Clique para visualizar"
-                                className="appointments-action-button"
-                                aria-label="Visualizar agendamento"
-                            >
-                                <Eye size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para editar"
-                                className="appointments-action-button"
-                                aria-label="Editar agendamento"
-                            >
-                                <Pencil size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para cancelar"
-                                className="appointments-action-button danger"
-                                aria-label="Cancelar agendamento"
-                            >
-                                <CircleX size={17} />
-                            </button>
-                        </div>
-                    </div>
-            
-                     <div className="appointment-row">
-                        <div className="appointments-date-time">
-                            <Clock3 size={18} />
-
-                            <div className="appointments-date-time-info">
-                                <strong>09:00</strong>
-                                <span>20/07/2026</span>
-                            </div>
-                        </div>
-
-                        <div className="appointments-client">
-                            <img
-                                src={PhotoDaniel}
-                                alt="Foto do cliente Daniel"
-                                className="appointments-client-avatar"
-                            />
-
-                            <div className="appointments-client-info">
-                                <strong>Daniel Alves</strong>
-                                <span>(11) 99999-9999</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-barber">Gabriel Oliveira Santos</span>
-
-                        <div className="appointments-service">
-                            <Scissors size={18} />
-
-                            <div className="appointments-service-info">
-                                <strong>Corte + Barba</strong>
-                                <span>50 minutos</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-status canceled">
-                            Cancelado
-                        </span>
-
-                        <div className="appointments-actions">
-                            <button
-                                type="button"
-                                title="Clique para visualizar"
-                                className="appointments-action-button"
-                                aria-label="Visualizar agendamento"
-                            >
-                                <Eye size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para editar"
-                                className="appointments-action-button"
-                                aria-label="Editar agendamento"
-                            >
-                                <Pencil size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para cancelar"
-                                className="appointments-action-button danger"
-                                aria-label="Cancelar agendamento"
-                            >
-                                <CircleX size={17} />
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div className="appointment-row">
-                        <div className="appointments-date-time">
-                            <Clock3 size={18} />
-
-                            <div className="appointments-date-time-info">
-                                <strong>09:00</strong>
-                                <span>20/07/2026</span>
-                            </div>
-                        </div>
-
-                        <div className="appointments-client">
-                            <img
-                                src={PhotoDaniel}
-                                alt="Foto do cliente Daniel"
-                                className="appointments-client-avatar"
-                            />
-
-                            <div className="appointments-client-info">
-                                <strong>Daniel Alves</strong>
-                                <span>(11) 99999-9999</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-barber">Gabriel Oliveira Santos</span>
-
-                        <div className="appointments-service">
-                            <Scissors size={18} />
-
-                            <div className="appointments-service-info">
-                                <strong>Corte + Barba</strong>
-                                <span>50 minutos</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-status pending">
-                            Pendente
-                        </span>
-
-                        <div className="appointments-actions">
-                            <button
-                                type="button"
-                                title="Clique para visualizar"
-                                className="appointments-action-button"
-                                aria-label="Visualizar agendamento"
-                            >
-                                <Eye size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para editar"
-                                className="appointments-action-button"
-                                aria-label="Editar agendamento"
-                            >
-                                <Pencil size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para cancelar"
-                                className="appointments-action-button danger"
-                                aria-label="Cancelar agendamento"
-                            >
-                                <CircleX size={17} />
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="appointment-row">
-                        <div className="appointments-date-time">
-                            <Clock3 size={18} />
-
-                            <div className="appointments-date-time-info">
-                                <strong>09:00</strong>
-                                <span>20/07/2026</span>
-                            </div>
-                        </div>
-
-                        <div className="appointments-client">
-                            <img
-                                src={PhotoDaniel}
-                                alt="Foto do cliente Daniel"
-                                className="appointments-client-avatar"
-                            />
-
-                            <div className="appointments-client-info">
-                                <strong>Daniel Alves</strong>
-                                <span>(11) 99999-9999</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-barber">Gabriel Oliveira Santos</span>
-
-                        <div className="appointments-service">
-                            <Scissors size={18} />
-
-                            <div className="appointments-service-info">
-                                <strong>Corte + Barba</strong>
-                                <span>50 minutos</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-status confirmed">
-                            Confirmado
-                        </span>
-
-                        <div className="appointments-actions">
-                            <button
-                                type="button"
-                                title="Clique para visualizar"
-                                className="appointments-action-button"
-                                aria-label="Visualizar agendamento"
-                            >
-                                <Eye size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para editar"
-                                className="appointments-action-button"
-                                aria-label="Editar agendamento"
-                            >
-                                <Pencil size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para cancelar"
-                                className="appointments-action-button danger"
-                                aria-label="Cancelar agendamento"
-                            >
-                                <CircleX size={17} />
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="appointment-row">
-                        <div className="appointments-date-time">
-                            <Clock3 size={18} />
-
-                            <div className="appointments-date-time-info">
-                                <strong>09:00</strong>
-                                <span>20/07/2026</span>
-                            </div>
-                        </div>
-
-                        <div className="appointments-client">
-                            <img
-                                src={PhotoDaniel}
-                                alt="Foto do cliente Daniel"
-                                className="appointments-client-avatar"
-                            />
-
-                            <div className="appointments-client-info">
-                                <strong>Daniel Alves</strong>
-                                <span>(11) 99999-9999</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-barber">Gabriel Oliveira Santos</span>
-
-                        <div className="appointments-service">
-                            <Scissors size={18} />
-
-                            <div className="appointments-service-info">
-                                <strong>Corte + Barba</strong>
-                                <span>50 minutos</span>
-                            </div>
-                        </div>
-
-                        <span className="appointments-status confirmed">
-                            Confirmado
-                        </span>
-
-                        <div className="appointments-actions">
-                            <button
-                                type="button"
-                                title="Clique para visualizar"
-                                className="appointments-action-button"
-                                aria-label="Visualizar agendamento"
-                            >
-                                <Eye size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para editar"
-                                className="appointments-action-button"
-                                aria-label="Editar agendamento"
-                            >
-                                <Pencil size={17} />
-                            </button>
-
-                            <button
-                                type="button"
-                                title="Clique para cancelar"
-                                className="appointments-action-button danger"
-                                aria-label="Cancelar agendamento"
-                            >
-                                <CircleX size={17} />
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div className="appointments-table-footer">
-                    <div className="appointments-results-info">
-                        <p>Mostrando 1 a 5 de 32 agendamentos</p>
-                    </div>
-
-                    <div className="appointments-pagination">
-                        <button type="button" className="pagination-button"><ChevronLeft/></button>
-                        <button type="button" className="pagination-button active">1</button>
-                        <button type="button" className="pagination-button">2</button>
-                        <button type="button" className="pagination-button">3</button>
-                        <button type="button" className="pagination-button"><ChevronRight/></button>
-                    </div>
-                </div>
-            </section>
+            {showModal && 
+                <AppointmentFormModal
+                    editingAppointment={editingAppointment}
+                    data={data}
+                    setData={setData}
+                    hora={hora}
+                    setHora={setHora}
+                    clienteId={clienteId}
+                    setClienteId={setClienteId}
+                    barbeiroId={barbeiroId}
+                    setBarbeiroId={setBarbeiroId}
+                    serviceId={serviceId}
+                    setServiceId={setServiceId}
+                    status={status}
+                    setStatus={setStatus}
+                    users={users}
+                    services={services}
+                    handleCloseModal={handleCloseModal}
+                    handleSubmit={handleSubmit}
+                />}
         </section>
     )
 }
