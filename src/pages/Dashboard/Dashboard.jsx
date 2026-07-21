@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { CalendarDays, Users, DollarSign, Package, Menu, Bell, TrendingUp, TrendingDown } from "lucide-react"
 import { Link } from "react-router-dom"
 import api from "../../services/api"
@@ -6,23 +6,58 @@ import DanielPhoto from "../../assets/images/foto-de-perfil.jpeg"
 import RevenueChart from "../../components/RevenueChart/RevenueChart"
 import TopServicesChart from "../../components/TopServicesChart/TopServicesChart"
 import SalesCategoryChart from "../../components/SalesCategoryChart/SalesCategoryChart"
+import formatters from "../../utils/formatters"
+import UserAvatar from "../../components/UserAvatar"
 import './Dashboard.css'
 
+
 function Dashboard() {
+
+  const [users, setUsers] = useState([])
+  const [appointments, setAppointments] = useState([])
+
   useEffect(() => {
     async function getUsers() {
       try {
         const response = await api.get("/users")
 
-        console.log(response.data)
+        setUsers(response.data)
+
       } catch (error) {
         console.log(error.response?.data || error.message)
       }
     }
 
     getUsers()
+
+    async function getAppointments(){
+      try{
+
+        const response = await api.get("/appointments/")
+
+        setAppointments(response.data)
+
+      }catch(error){
+        console.log(error.response?.data || error.message)
+      }
+    }
+
+    getAppointments()
   }, [])
 
+  const totalClients = users.filter((user) => user.role === "cliente").length
+
+
+  const dataDeHoje = new Date()
+  const ano = dataDeHoje.getFullYear()
+  const mes = dataDeHoje.getMonth() + 1
+  const mesFormatado = mes < 10 ? `0${mes}` : mes
+  const dia = dataDeHoje.getDate()
+
+  const dataFormatada = `${dia}/${mesFormatado}/${ano}`
+
+  const arrayFilter = appointments.filter((appointment) => dataFormatada === formatters.formatDate(appointment.data))
+  
   return (
     <section className="dashboard-page">
 
@@ -56,7 +91,7 @@ function Dashboard() {
           <div className="summary-content">
               <span className="summary-label">Agendamentos hoje</span>
 
-              <strong className="summary-value">12</strong>
+              <strong className="summary-value">{arrayFilter.length}</strong>
 
             <div className="summary-change">
                 <div className="summary-change-value negative">
@@ -80,7 +115,7 @@ function Dashboard() {
           <div className="summary-content">
             <span className="summary-label">Clientes Cadastrados</span>
 
-            <strong className="summary-value">156</strong>
+            <strong className="summary-value">{totalClients}</strong>
 
             <div className="summary-change">
                 <div className="summary-change-value positive">
@@ -183,82 +218,32 @@ function Dashboard() {
             <div className="appointments-header">
               <h2>Agendamentos de hoje</h2>
               <Link className="appointments-link" to="/appointments">Ver todos</Link>
-          </div>
-
-            <div className="appointments-list">
-              <div className="appointment-item">
-                <span className="appointment-time">09:00</span>
-
-                <img className="appointment-avatar" 
-                src={DanielPhoto}
-                alt="Foto de Daniel" />
-
-                
-                <strong className="appointment-client">João Pereira</strong>
-                <span className="appointment-service">Corte + Barba</span>
-                <span className="appointment-status confirmed">Confirmado</span>
-
-              </div>
-
-              <div className="appointment-item">
-                <span className="appointment-time">10:30</span>
-
-                <img className="appointment-avatar" 
-                src={DanielPhoto}
-                alt="Foto de Daniel" />
-
-                
-                <strong className="appointment-client">João Pereira</strong>
-                <span className="appointment-service">Corte + Barba</span>
-                
-                <span className="appointment-status pending">Pendente</span>
-              </div>
-
-              <div className="appointment-item">
-                <span className="appointment-time">10:30</span>
-
-                <img className="appointment-avatar" 
-                src={DanielPhoto}
-                alt="Foto de Daniel" />
-
-                
-                <strong className="appointment-client">João Pereira</strong>
-                <span className="appointment-service">Corte + Barba</span>
-                
-                <span className="appointment-status pending">Pendente</span>
-              </div>
-
-              <div className="appointment-item">
-                <span className="appointment-time">14:00</span>
-
-                <img className="appointment-avatar" 
-                src={DanielPhoto} 
-                alt="Foto de Daniel" />
-
-                
-                <strong className="appointment-client">João Pereira</strong>
-                <span className="appointment-service">Corte + Barba</span>
-                <span className="appointment-status confirmed">Confirmado</span>
-
-              </div>
-
-              <div className="appointment-item">
-                <span className="appointment-time">14:00</span>
-
-                <img className="appointment-avatar" 
-                src={DanielPhoto} 
-                alt="Foto de Daniel" />
-
-                
-                <strong className="appointment-client">João Pereira</strong>
-                <span className="appointment-service">Corte + Barba</span>
-                <span className="appointment-status canceled">Cancelado</span>
-
-              </div>
             </div>
 
-            <button className="new-appointment-button" type="button">+ Novo agendamento</button>
+            {arrayFilter.map((appointment) => {
+                
+                return (
+                    <div key={appointment.id} className="appointments-list">
+                      <div className="appointment-item">
+                        <span className="appointment-time">{formatters.formatTime(appointment.hora)}</span>
+                
+                        <UserAvatar
+                          nome={appointment.cliente.nome}
+                        />
+  
+                        <strong className="appointment-client">{appointment.cliente.nome}</strong>
+                        <span className="appointment-service">{appointment.service.nome}</span>
+                        <span className="appointment-status confirmed">{formatters.formatStatus(appointment.status)}</span>
+  
+                      </div>
+                    </div>
+                )
+
+            })}
+
+            <Link className="new-appointment-button" to="/appointments/">+ Novo agendamento</Link>
         </div>
+
       </section>
 
       <section className="dashboard-bottom-grid">

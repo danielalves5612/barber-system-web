@@ -293,6 +293,7 @@
     background-color: transparent;
     color: var(--color-primary);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .dashboard-card-header {
