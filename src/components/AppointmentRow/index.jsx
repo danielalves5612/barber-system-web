@@ -2,6 +2,7 @@ import formatters from "../../utils/formatters"
 import PhotoDaniel from "../../assets/images/foto-de-perfil.jpeg"
 import { Clock3, Scissors, Eye, Pencil, CircleX } from "lucide-react"
 import "./style.css"
+import UserAvatar from "../UserAvatar"
 
 function AppointmentRow({
     appointment,
@@ -21,10 +22,9 @@ function AppointmentRow({
             </div>
 
             <div className="appointments-client">
-                <img
-                    src={PhotoDaniel}
-                    alt="Foto do cliente Daniel"
-                    className="appointments-client-avatar"
+                
+                <UserAvatar
+                    nome={appointment.cliente.nome}
                 />
 
                 <div className="appointments-client-info">

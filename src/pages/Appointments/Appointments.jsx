@@ -1,7 +1,6 @@
 import { Plus, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
-import PhotoDaniel from "../../assets/images/foto-de-perfil.jpeg"
 import api from "../../services/api"
 import AppointmentViewModal from "../../components/AppointmentViewModal"
 import AppointmentFormModal from "../../components/AppointmentFormModal"
