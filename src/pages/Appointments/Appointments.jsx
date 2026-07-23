@@ -1,4 +1,4 @@
-import { Plus, ChevronLeft, ChevronRight } from "lucide-react"
+import { Plus, ChevronLeft, ChevronRight, CalendarDays } from "lucide-react"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
 import api from "../../services/api"
@@ -232,8 +232,12 @@ function Appointments(){
             <section className="appointments-header">
 
                 <div className="appointments-title">
-                    <h1>Agendamentos</h1>
-                    <p>Gerencie todos os agendamentos da barbearia</p>
+                    <CalendarDays/>
+
+                    <div className="appointments-title-text">
+                        <h1>Agendamentos</h1>
+                        <p>Gerencie todos os agendamentos da barbearia</p>
+                    </div>
                 </div>
 
                 <button onClick={() => setShowModal(true)} className="new-appointment-button"><Plus/>Novo agendamento</button>

@@ -1,56 +1,40 @@
-.appointments-page {
-    width: 100%;
-    min-height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-
-    padding: 30px;
-}
-
-.appointments-header {
+.services-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
 }
 
-.appointments-title {
+.services-title {
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
-.appointments-title h1 {
+.services-title h1 {
     font-size: 2rem;
     line-height: 1.2;
 }
 
-.appointments-title p {
+.services-title p {
     color: var(--color-text-muted);
     font-size: .95rem;
 }
 
-.appointments-title > svg{
+.services-title > svg{
     width: 50px;
     height: 50px;
     color: var(--color-primary);
     flex-shrink: 0;
 }
 
-.appointments-tile-text {
+.services-title-text {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
 
-.new-appointment-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
+.new-service-button {
     min-height: 44px;
     padding: 0 18px;
 
@@ -64,35 +48,16 @@
     font-weight: 600;
 
     cursor: pointer;
+
     transition:
         background-color .2s ease,
         transform .2s ease;
 }
 
-.new-appointment-button:hover {
+.new-service-button:hover {
     background-color: var(--color-primary-hover);
 }
 
-.new-appointment-button:active {
+.new-service-button:active {
     transform: scale(.98);
-}
-
-@media (max-width: 700px) {
-    .appointments-page {
-        padding: 20px 16px;
-    }
-
-    .appointments-header {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .new-appointment-button {
-        width: 100%;
-    }
-
-    .appointments-title h1 {
-        font-size: 1.7rem;
-    }
-
 }

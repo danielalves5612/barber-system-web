@@ -1,0 +1,166 @@
+.service-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    min-width: 0;
+}
+
+.service-name {
+    color: var(--color-text);
+    font-size: .95rem;
+    font-weight: 600;
+}
+
+.service-description {
+    max-width: 320px;
+    overflow: hidden;
+
+    color: var(--color-text-muted);
+    font-size: .8rem;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.service-category {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: max-content;
+
+    color: var(--color-text-muted);
+    font-size: .86rem;
+    font-weight: 500;
+}
+
+.service-category-dot,
+.service-status-dot {
+    flex-shrink: 0;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+}
+
+.service-category.cabelo .service-category-dot {
+    background-color: #3b82f6;
+}
+
+.service-category.barba .service-category-dot {
+    background-color: #8b5cf6;
+}
+
+.service-category.combo .service-category-dot {
+    background-color: #22c55e;
+}
+
+.service-category.tratamento .service-category-dot {
+    background-color: #eab308;
+}
+
+.service-category.acabamento .service-category-dot {
+    background-color: #64748b;
+}
+
+.service-duration {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: var(--color-text-muted);
+    font-size: .86rem;
+}
+
+.service-duration svg {
+    opacity: .75;
+}
+
+.service-price {
+    color: var(--color-text);
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.service-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    width: max-content;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+.service-status.active {
+    color: #4ade80;
+    background-color: rgba(34, 197, 94, .1);
+}
+
+.service-status.active .service-status-dot {
+    background-color: #22c55e;
+}
+
+.service-status.inactive {
+    color: #f87171;
+    background-color: rgba(239, 68, 68, .1);
+}
+
+.service-status.inactive .service-status-dot {
+    background-color: #ef4444;
+}
+
+.service-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.service-action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    color: var(--color-text-muted);
+    background: transparent;
+
+    border: 1px solid rgba(148, 163, 184, .2);
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition:
+        color .2s ease,
+        background-color .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.service-action-button:hover {
+    transform: translateY(-1px);
+}
+
+.service-action-button.edit:hover {
+    color: #60a5fa;
+    background-color: rgba(59, 130, 246, .1);
+    border-color: rgba(59, 130, 246, .4);
+}
+
+.service-action-button.delete:hover {
+    color: #f87171;
+    background-color: rgba(239, 68, 68, .1);
+    border-color: rgba(239, 68, 68, .4);
+}

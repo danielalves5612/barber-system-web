@@ -1,0 +1,109 @@
+.services-filters {
+    display: grid;
+    grid-template-columns:
+        minmax(280px, 2fr)
+        minmax(160px, 1fr)
+        minmax(150px, 1fr)
+        minmax(150px, 1fr)
+        auto;
+
+    align-items: end;
+    gap: 16px;
+
+    padding: 20px;
+
+    background-color: #172033;
+    border: 1px solid rgba(148, 163, 184, .18);
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(2, 6, 23, .22);
+}
+
+.services-search {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+}
+
+.services-search svg {
+    position: absolute;
+    left: 14px;
+
+    color: var(--color-text-muted);
+
+    pointer-events: none;
+}
+
+.services-search input,
+.services-filter select {
+    width: 100%;
+    height: 44px;
+
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    outline: none;
+
+    background-color: var(--color-bg);
+    color: var(--color-text);
+
+    font-size: .88rem;
+
+    transition: border-color .2s ease;
+}
+
+.services-search input {
+    padding: 0 14px 0 44px;
+}
+
+.services-search input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.services-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.services-filter label {
+    color: var(--color-text-muted);
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.services-filter select {
+    padding: 0 12px;
+    cursor: pointer;
+}
+
+.services-search input:focus,
+.services-filter select:focus {
+    border-color: var(--color-primary);
+}
+
+.services-filter-actions button {
+    height: 44px;
+    padding: 0 16px;
+
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+
+    background-color: transparent;
+    color: var(--color-text-muted);
+
+    font-size: .85rem;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background-color .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+}
+
+.services-filter-actions button:hover {
+    background-color: rgba(59, 130, 246, .1);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
