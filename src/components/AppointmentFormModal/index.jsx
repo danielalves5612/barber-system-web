@@ -1,4 +1,6 @@
 import "./style.css"
+import { AuthContext } from "../../contexts/AuthProvider"
+import { useContext } from "react"
 
 function AppointmentFormModal({
     editingAppointment,
@@ -15,10 +17,13 @@ function AppointmentFormModal({
     status,
     setStatus,
     users,
+    barbers,
     services,
     handleCloseModal,
     handleSubmit
 }){
+
+    const {user} = useContext(AuthContext)
  return (
         <div onClick={() => handleCloseModal()} className="modal-overlay">
             <div onClick={(event) => event.stopPropagation()} className="appointment-modal">
@@ -34,28 +39,30 @@ function AppointmentFormModal({
 
                         <label htmlFor="hora">Horário</label>
                         <input value={hora} onChange={(event) => setHora(event.target.value)} type="time" name="hora" id="hora" />
-
-                        <label htmlFor="cliente">Cliente</label>
-                        <select value={clienteId} onChange={(event) => setClienteId(event.target.value)} name="cliente" id="cliente">
-                            <option value="">Selecione um cliente</option>
-                            {users.map((user) => {
-                                if(user.role === "cliente"){
-                                    return (
-                                        <option key={user.id} value={user.id}>{user.nome}</option>
-                                    )
-                                }
-                            })}
-                        </select>
                         
+                        {user.role === "admin" && (
+                            <>
+                                <label htmlFor="cliente">Cliente</label>
+                                <select value={clienteId} onChange={(event) => setClienteId(event.target.value)} name="cliente" id="cliente">
+                                    <option value="">Selecione um cliente</option>
+                                    {users.map((user) => {
+                                        if(user.role === "cliente"){
+                                            return (
+                                                <option key={user.id} value={user.id}>{user.nome}</option>
+                                            )
+                                        }
+                                    })}
+                                </select>
+                            </>
+                        )}
+
                         <label htmlFor="barbeiro">Barbeiro</label>
                         <select value={barbeiroId} onChange={(event) => setBarbeiroId(event.target.value)} name="barbeiro" id="barbeiro">
                             <option value="">Selecione um barbeiro</option>
-                            {users.map((user) => {
-                                if(user.role === 'barbeiro'){
-                                    return (
-                                        <option key={user.id} value={user.id}>{user.nome}</option>
-                                    )
-                                }
+                            {barbers.map((barber) => {
+                                return (
+                                    <option key={barber.id} value={barber.id}>{barber.nome}</option>
+                                )
                             })}
                         </select>
                         
@@ -69,7 +76,7 @@ function AppointmentFormModal({
                             })}
                         </select>
 
-                        {editingAppointment && (
+                        {editingAppointment && user.role === "admin" && (
                             <div>
                                 <label htmlFor="status">Status</label>
                                 <select value={status} onChange={(event) => setStatus(event.target.value)} name="status" id="status">

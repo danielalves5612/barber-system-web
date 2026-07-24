@@ -36,9 +36,7 @@ function Appointments(){
 
     const { user } = useContext(AuthContext)
 
-    const isClient = user.role === "cliente" ? true : false
-
-    console.log(isClient)
+    const [barbers, setBarbers] = useState([])
 
     async function getAppointments(){
         try{
@@ -48,7 +46,7 @@ function Appointments(){
 
             setAppointments(appointment)
         }catch(e){
-            const message = e.response?.data?.errors?.[0] || "Falha ao criar agendamentos"
+            const message = e.response?.data?.errors?.[0] || "Falha ao carregar agendamentos"
             toast.error(message)
         }
     }
@@ -57,6 +55,23 @@ function Appointments(){
 
         getAppointments()
 
+    }, [])
+
+    useEffect(() => {
+        async function getBarbers(){
+            try{
+                const response = await api.get('/barbers')
+
+                const barber = response.data
+
+                setBarbers(barber)
+            }catch(e){
+            const message = e.response?.data?.errors?.[0] || "Falha ao carregar barbeiros"
+            toast.error(message)
+            }
+        }
+
+        getBarbers()
     }, [])
 
     useEffect(() => {
@@ -106,16 +121,19 @@ function Appointments(){
     async function handleSubmit(event){
         event.preventDefault()
 
-        if(!data || !hora || !clienteId || !serviceId || !barbeiroId){
+        const clienteDoAgendamento = user.role === "admin" ? clienteId : user.id
+
+        if(!data || !hora || !clienteDoAgendamento || !serviceId || !barbeiroId){
             return toast.error('Todos os campos são obrigatórios')
         }
+
 
         if(editingAppointment){
             try{
                 await api.put(`/appointments/${editingAppointment.id}`, {
                     data,
                     hora,
-                    cliente_id: clienteId,
+                    cliente_id: clienteDoAgendamento,
                     barbeiro_id: barbeiroId,
                     service_id: serviceId,
                     status,
@@ -132,12 +150,11 @@ function Appointments(){
             }
 
         }else{
-
             try{
                 await api.post("/appointments", {
                     data,
                     hora,
-                    cliente_id: clienteId,
+                    cliente_id: clienteDoAgendamento,
                     barbeiro_id: barbeiroId,
                     service_id: serviceId
                 })
@@ -260,6 +277,7 @@ function Appointments(){
                 filterBarbeiro={filterBarbeiro}
                 setFilterBarbeiro={setFilterBarbeiro}
                 users={users}
+                barbers={barbers}
                 handleClickClearFilter={handleClickClearFilter}
                 filterData={filterData}
                 setFilterData={setFilterData}
@@ -302,6 +320,7 @@ function Appointments(){
                     status={status}
                     setStatus={setStatus}
                     users={users}
+                    barbers={barbers}
                     services={services}
                     handleCloseModal={handleCloseModal}
                     handleSubmit={handleSubmit}

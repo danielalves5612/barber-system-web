@@ -9,6 +9,7 @@ function AppointmentFilters({
     filterBarbeiro,
     setFilterBarbeiro,
     users,
+    barbers,
     handleClickClearFilter,
     setFilterData,
     filterData
@@ -41,12 +42,10 @@ function AppointmentFilters({
                 <label htmlFor="barber">Barbeiro</label>
                 <select value={filterBarbeiro} onChange={(event) => setFilterBarbeiro(event.target.value)} name="barber" id="barber">
                     <option value="all">Todos</option>
-                    {users.map((user) => {
-                        if(user.role === "barbeiro"){
-                            return (
-                                <option key={user.id} value={user.nome}>{user.nome}</option>
-                            )
-                        }
+                    {barbers.map((barber) => {
+                        return (
+                            <option key={barber.id} value={barber.nome}>{barber.nome}</option>
+                        )
                     })}
                 </select>
             </div>
