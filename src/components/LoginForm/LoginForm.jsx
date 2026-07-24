@@ -3,12 +3,16 @@ import { Link } from "react-router-dom"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import api from "../../services/api"
+import { AuthContext } from "../../contexts/AuthProvider"
+import { useContext } from "react"
 import "./LoginForm.css"
 
 function LoginForm(){
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    const { setUser } = useContext(AuthContext)
 
     const navigate = useNavigate()
 
@@ -22,12 +26,22 @@ function LoginForm(){
             })
 
             const { token } = response.data
+            const { user } = response.data
+
+            const userJson = JSON.stringify(user)
 
             localStorage.setItem("token", token)
+            localStorage.setItem("user", userJson)
 
-            navigate("/dashboard")
+            setUser(response.data.user)
 
-            console.log(response.data)
+            if(response.data.user.role === "admin"){
+                navigate("/dashboard")
+
+            }else if(response.data.user.role === "cliente"){
+                navigate("/appointments")
+            }
+
         }catch(error){
             console.log(error.response?.data || error.message)
         }

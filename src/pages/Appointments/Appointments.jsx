@@ -7,10 +7,11 @@ import AppointmentFormModal from "../../components/AppointmentFormModal"
 import AppointmentFilters from "../../components/AppointmentFilters"
 import AppointmentsTable from "../../components/AppointmentsTable"
 import formatters from "../../utils/formatters"
+import { AuthContext } from "../../contexts/AuthProvider"
+import { useContext } from "react"
 import "./Appointments.css"
 
 function Appointments(){
-
     const [appointments, setAppointments] = useState([])
     const [showModal, setShowModal] = useState(false)
 
@@ -33,6 +34,12 @@ function Appointments(){
     const [filterBarbeiro, setFilterBarbeiro] = useState("all")
     const [filterData, setFilterData] = useState('')
 
+    const { user } = useContext(AuthContext)
+
+    const isClient = user.role === "cliente" ? true : false
+
+    console.log(isClient)
+
     async function getAppointments(){
         try{
             const response = await api.get("/appointments")
@@ -53,23 +60,25 @@ function Appointments(){
     }, [])
 
     useEffect(() => {
-        async function getUsers(){
-            try{
-                const response = await api.get('/users')
+        if(user?.role === "admin"){
+            async function getUsers(){
+                try{
+                    const response = await api.get('/users')
 
-                const users = response.data
+                    const users = response.data
 
-                setUsers(users)
+                    setUsers(users)
 
-            }catch(e){
-                const message = e.response?.data?.errors?.[0] || "Falha ao carregar usuários"
-                toast.error(message)
+                }catch(e){
+                    const message = e.response?.data?.errors?.[0] || "Falha ao carregar usuários"
+                    toast.error(message)
+                }
             }
+
+            getUsers()
         }
 
-        getUsers()
-
-    }, [])
+    }, [user])
 
     useEffect(() => {
         async function getServices(){
