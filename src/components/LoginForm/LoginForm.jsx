@@ -4,6 +4,7 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import api from "../../services/api"
 import { AuthContext } from "../../contexts/AuthProvider"
+import { toast } from "react-toastify"
 import { useContext } from "react"
 import "./LoginForm.css"
 
@@ -43,7 +44,8 @@ function LoginForm(){
             }
 
         }catch(error){
-            console.log(error.response?.data || error.message)
+            const message = error.response?.data?.error|| "Falha ao realizar login"
+            toast.error(message)
         }
     }
 
