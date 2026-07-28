@@ -12,7 +12,7 @@ import {
     LogOut } from 'lucide-react'
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthProvider'
-import UserAvatar from '../UserAvatar'
+import UserAvatar from '../UserAvatar/UserAvatar'
 import nameUtils from '../../utils/nameUtils'
 import './Sidebar.css'
 

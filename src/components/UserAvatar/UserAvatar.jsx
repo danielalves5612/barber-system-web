@@ -1,4 +1,4 @@
-import "./style.css"
+import "./UserAvatar.css"
 
 function UserAvatar({ nome }){
 

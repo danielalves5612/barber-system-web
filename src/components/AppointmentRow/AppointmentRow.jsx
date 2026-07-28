@@ -1,7 +1,7 @@
 import formatters from "../../utils/formatters"
 import { Clock3, Scissors, Eye, Pencil, CircleX } from "lucide-react"
 import "./AppointmentRow.css"
-import UserAvatar from "../UserAvatar"
+import UserAvatar from "../UserAvatar/UserAvatar"
 
 function AppointmentRow({
     appointment,

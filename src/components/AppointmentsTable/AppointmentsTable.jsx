@@ -1,4 +1,4 @@
-import AppointmentRow from "../AppointmentRow"
+import AppointmentRow from "../AppointmentRow/AppointmentRow"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import "./AppointmentsTable.css"
 

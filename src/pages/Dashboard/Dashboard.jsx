@@ -6,7 +6,7 @@ import RevenueChart from "../../components/RevenueChart/RevenueChart"
 import TopServicesChart from "../../components/TopServicesChart/TopServicesChart"
 import SalesCategoryChart from "../../components/SalesCategoryChart/SalesCategoryChart"
 import formatters from "../../utils/formatters"
-import UserAvatar from "../../components/UserAvatar"
+import UserAvatar from "../../components/UserAvatar/UserAvatar"
 import './Dashboard.css'
 
 
