@@ -1,13 +1,17 @@
 .appointments-filters {
+    width: 100%;
+    min-width: 0;
+
     display: grid;
     grid-template-columns:
-        minmax(240px, 2fr)
+        minmax(200px, 2fr)
+        minmax(115px, 1fr)
         minmax(130px, 1fr)
-        minmax(150px, 1fr)
-        minmax(150px, 1fr)
+        minmax(135px, 1fr)
         auto;
+
     align-items: end;
-    gap: 16px;
+    gap: 14px;
 
     padding: 20px;
 
@@ -18,17 +22,20 @@
 }
 
 .appointments-search {
+    min-width: 0;
+
     position: relative;
+
     display: flex;
     align-items: center;
 }
 
 .appointments-search svg {
-    position: absolute;
-    left: 14px;
-
     width: 19px;
     height: 19px;
+
+    position: absolute;
+    left: 14px;
 
     color: var(--color-text-muted);
     pointer-events: none;
@@ -36,6 +43,7 @@
 
 .search-box {
     width: 100%;
+    min-width: 0;
     height: 44px;
 
     padding: 0 14px 0 44px;
@@ -48,6 +56,7 @@
     color: var(--color-text);
 
     font-size: .9rem;
+
     transition: border-color .2s ease;
 }
 
@@ -60,6 +69,8 @@
 }
 
 .appointments-filter {
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
     gap: 7px;
@@ -74,6 +85,7 @@
 .appointments-filter select,
 .appointments-filter input {
     width: 100%;
+    min-width: 0;
     height: 44px;
 
     padding: 0 12px;
@@ -87,6 +99,7 @@
 
     font-size: .88rem;
     cursor: pointer;
+
     transition: border-color .2s ease;
 }
 
@@ -106,6 +119,7 @@
 
 .appointments-filter-actions button {
     height: 44px;
+
     padding: 0 16px;
 
     border: 1px solid var(--color-border);
@@ -118,6 +132,7 @@
     white-space: nowrap;
 
     cursor: pointer;
+
     transition:
         background-color .2s ease,
         color .2s ease,
@@ -130,27 +145,38 @@
     color: var(--color-primary);
 }
 
-@media (max-width: 1200px){
-    .appointments-filters {
-        grid-template-columns: repeat(2, minmax(180px, 1fr));
+@media (max-width: 1350px) {
+    .services-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .appointments-search {
+    .services-search {
         grid-column: 1 / -1;
     }
 
-    .appointments-filter-actions button {
+    .services-filter-actions {
+        grid-column: span 2;
+    }
+
+    .services-filter-actions button {
         width: 100%;
     }
 }
 
-@media (max-width: 700px){
+@media (max-width: 700px) {
     .appointments-filters {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+
         padding: 16px;
     }
 
     .appointments-search {
         grid-column: auto;
+    }
+
+    .appointments-filter-actions,
+    .appointments-filter-actions button {
+        width: 100%;
     }
 }

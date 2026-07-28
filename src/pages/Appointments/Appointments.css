@@ -1,15 +1,15 @@
 .appointments-page {
     width: 100%;
-    min-height: 100vh;
+    min-width: 0;
 
     display: flex;
     flex-direction: column;
     gap: 24px;
-
-    padding: 30px;
 }
 
 .appointments-header {
+    min-width: 0;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -17,41 +17,46 @@
 }
 
 .appointments-title {
+    min-width: 0;
+
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
+.appointments-title > svg {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+
+    color: var(--color-primary);
+}
+
+.appointments-title-text {
+    min-width: 0;
+}
+
 .appointments-title h1 {
-    font-size: 2rem;
+    font-size: clamp(1.6rem, 3vw, 2rem);
     line-height: 1.2;
 }
 
 .appointments-title p {
+    margin-top: 3px;
+
     color: var(--color-text-muted);
     font-size: .95rem;
 }
 
-.appointments-title > svg{
-    width: 50px;
-    height: 50px;
-    color: var(--color-primary);
-    flex-shrink: 0;
-}
-
-.appointments-tile-text {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
 .new-appointment-button {
+    min-height: 44px;
+    flex-shrink: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
 
-    min-height: 44px;
     padding: 0 18px;
 
     border: none;
@@ -64,6 +69,7 @@
     font-weight: 600;
 
     cursor: pointer;
+
     transition:
         background-color .2s ease,
         transform .2s ease;
@@ -79,20 +85,29 @@
 
 @media (max-width: 700px) {
     .appointments-page {
-        padding: 20px 16px;
+        gap: 18px;
     }
 
     .appointments-header {
         align-items: stretch;
         flex-direction: column;
+        gap: 16px;
+    }
+
+    .appointments-title {
+        align-items: flex-start;
+    }
+
+    .appointments-title > svg {
+        width: 38px;
+        height: 38px;
+    }
+
+    .appointments-title p {
+        font-size: .85rem;
     }
 
     .new-appointment-button {
         width: 100%;
     }
-
-    .appointments-title h1 {
-        font-size: 1.7rem;
-    }
-
 }

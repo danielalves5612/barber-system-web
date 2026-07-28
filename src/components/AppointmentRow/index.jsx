@@ -11,42 +11,57 @@ function AppointmentRow({
     handleClickCancel
 }){
     return (
-        <div className="appointment-row">
-            <div className="appointments-date-time">
-                <Clock3 size={18} />
+        <article className="appointment-row">
+            <div className="appointment-card-header">
+                <div className="appointments-date-time">
+                    <Clock3 size={18} />
 
-                <div className="appointments-date-time-info">
-                    <strong>{formatters.formatTime(appointment.hora)}</strong>
-                    <span>{formatters.formatDate(appointment.data)}</span>
+                    <div className="appointments-date-time-info">
+                        <strong>{formatters.formatTime(appointment.hora)}</strong>
+                        <span>{formatters.formatDate(appointment.data)}</span>
+                    </div>
                 </div>
+
+                <span className={`appointments-status ${appointment.status}`}>
+                    {formatters.formatStatus(appointment.status)}
+                </span>
             </div>
 
             <div className="appointments-client">
-                
-                <UserAvatar
-                    nome={appointment.cliente.nome}
-                />
+                <UserAvatar nome={appointment.cliente.nome} />
 
                 <div className="appointments-client-info">
+                    <span className="appointment-mobile-label">Cliente</span>
                     <strong>{appointment.cliente.nome}</strong>
-                    <span>{formatters.formatTelephone(appointment.cliente.telefone)}</span>
+                    <span>
+                        {formatters.formatTelephone(
+                            appointment.cliente.telefone
+                        )}
+                    </span>
                 </div>
             </div>
 
-            <span className="appointments-barber">{appointment.barbeiro.nome}</span>
+            <div className="appointments-barber-wrapper">
+                <span className="appointment-mobile-label">Barbeiro</span>
+
+                <strong className="appointments-barber">
+                    {appointment.barbeiro.nome}
+                </strong>
+            </div>
 
             <div className="appointments-service">
                 <Scissors size={18} />
 
                 <div className="appointments-service-info">
+                    <span className="appointment-mobile-label">Serviço</span>
                     <strong>{appointment.service.nome}</strong>
-                    <span>{formatters.formatDuration(appointment.service.duracao)}</span>
+                    <span>
+                        {formatters.formatDuration(
+                            appointment.service.duracao
+                        )}
+                    </span>
                 </div>
             </div>
-
-            <span className={`appointments-status ${appointment.status}`}>
-                {formatters.formatStatus(appointment.status)}
-            </span>
 
             <div className="appointments-actions">
                 <button
@@ -79,8 +94,8 @@ function AppointmentRow({
                     <CircleX size={17} />
                 </button>
             </div>
-        </div>
-    ) 
+        </article>
+    )
 }
 
 export default AppointmentRow

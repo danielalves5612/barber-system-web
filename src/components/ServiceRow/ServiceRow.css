@@ -164,3 +164,25 @@
     background-color: rgba(239, 68, 68, .1);
     border-color: rgba(239, 68, 68, .4);
 }
+
+@media (max-width: 560px) {
+    .service-category,
+    .service-duration {
+        font-size: .8rem;
+    }
+
+    .service-category-dot {
+        width: 7px;
+        height: 7px;
+    }
+
+    .service-duration svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .service-status {
+        padding: 5px 10px;
+        font-size: .74rem;
+    }
+}

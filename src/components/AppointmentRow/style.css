@@ -1,32 +1,47 @@
-.appointment-row{
-    min-height:82px;
-    border-bottom:1px solid rgba(148,163,184,.12);
-    transition:.2s;
+.appointment-row {
+    min-width: 0;
+    min-height: 82px;
+
+    border-bottom: 1px solid rgba(148, 163, 184, .12);
+
+    transition: background-color .2s ease;
 }
 
-.appointment-row:hover{
-    background:rgba(59,130,246,.05);
+.appointment-row:hover {
+    background-color: rgba(59, 130, 246, .05);
 }
 
-.appointment-row:last-child{
-    border-bottom:none;
+.appointment-row:last-child {
+    border-bottom: none;
+}
+
+.appointment-card-header {
+    display: contents;
+}
+
+.appointment-mobile-label {
+    display: none;
 }
 
 .appointments-date-time {
+    min-width: 0;
+
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .appointments-date-time > svg {
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
 
     color: var(--color-text-muted);
 }
 
 .appointments-date-time-info {
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -34,13 +49,14 @@
 
 .appointments-date-time-info strong {
     color: var(--color-text);
-    font-size: .92rem;
+
+    font-size: .9rem;
     line-height: 1;
 }
 
 .appointments-date-time-info span {
     color: var(--color-text-muted);
-    font-size: .76rem;
+    font-size: .72rem;
 }
 
 .appointments-client {
@@ -48,7 +64,7 @@
 
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .appointments-client-avatar {
@@ -58,7 +74,6 @@
 
     border-radius: 50%;
     object-fit: cover;
-    object-position: center;
 }
 
 .appointments-client-info {
@@ -70,24 +85,41 @@
 }
 
 .appointments-client-info strong {
+    min-width: 0;
     overflow: hidden;
 
     color: var(--color-text);
-    font-size: .92rem;
-    line-height: 1.1;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+
+    font-size: .88rem;
+    line-height: 1.2;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
-.appointments-client-info span {
+.appointments-client-info > span:last-child {
     color: var(--color-text-muted);
-    font-size: .76rem;
+    font-size: .72rem;
+    opacity: .8;
+}
+
+.appointments-barber-wrapper {
+    min-width: 0;
 }
 
 .appointments-barber {
+    min-width: 0;
+    overflow: hidden;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
     color: var(--color-text);
-    font-size: .9rem;
-    font-weight: 600;
+
+    font-size: .86rem;
+    line-height: 1.25;
 }
 
 .appointments-service {
@@ -95,12 +127,12 @@
 
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .appointments-service > svg {
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
 
     color: var(--color-primary);
@@ -118,24 +150,29 @@
     overflow: hidden;
 
     color: var(--color-text);
-    font-size: .9rem;
-    line-height: 1.1;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+
+    font-size: .86rem;
+    line-height: 1.2;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
-.appointments-service-info span {
+.appointments-service-info > span:last-child {
     color: var(--color-text-muted);
-    font-size: .76rem;
+    font-size: .72rem;
 }
 
 .appointments-status {
     width: max-content;
-    padding: 6px 12px;
+    max-width: 100%;
+
+    padding: 6px 11px;
 
     border-radius: 999px;
 
-    font-size: .78rem;
+    font-size: .72rem;
     font-weight: 600;
     text-align: center;
 }
@@ -145,7 +182,7 @@
     color: #4ade80;
 }
 
-.appointments-status.agendado{
+.appointments-status.agendado {
     background-color: rgba(250, 204, 21, .15);
     color: #facc15;
 }
@@ -155,7 +192,7 @@
     color: #f87171;
 }
 
-.appointments-status.concluido{
+.appointments-status.concluido {
     background-color: rgba(59, 130, 246, .15);
     color: #60a5fa;
 }
@@ -183,6 +220,7 @@
     color: var(--color-text-muted);
 
     cursor: pointer;
+
     transition:
         background-color .2s ease,
         border-color .2s ease,
@@ -208,4 +246,41 @@
     border-color: var(--color-danger);
     background-color: rgba(239, 68, 68, .12);
     color: var(--color-danger);
+}
+
+@media (min-width: 821px) {
+    .appointment-card-header .appointments-date-time {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .appointments-client {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .appointments-barber-wrapper {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .appointments-service {
+        grid-column: 4;
+        grid-row: 1;
+    }
+
+    .appointment-card-header .appointments-status {
+        grid-column: 5;
+        grid-row: 1;
+    }
+
+    .appointments-actions {
+        grid-column: 6;
+        grid-row: 1;
+    }
+
+    .appointment-row > *,
+    .appointment-card-header > * {
+        align-self: center;
+    }
 }
