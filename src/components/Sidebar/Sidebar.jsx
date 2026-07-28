@@ -10,7 +10,6 @@ import {
     ChartColumn,
     Settings,
     LogOut } from 'lucide-react'
-import PhotoDaniel from "../../assets/images/foto-de-perfil.jpeg"
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthProvider'
 import UserAvatar from '../UserAvatar'

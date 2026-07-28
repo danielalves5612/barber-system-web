@@ -1,5 +1,4 @@
 import formatters from "../../utils/formatters"
-import PhotoDaniel from "../../assets/images/foto-de-perfil.jpeg"
 import { Clock3, Scissors, Eye, Pencil, CircleX } from "lucide-react"
 import "./AppointmentRow.css"
 import UserAvatar from "../UserAvatar"
