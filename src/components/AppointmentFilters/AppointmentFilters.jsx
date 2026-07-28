@@ -1,5 +1,5 @@
 import { Search } from "lucide-react"
-import "./style.css"
+import "./AppointmentFilters.css"
 
 function AppointmentFilters({
     search,

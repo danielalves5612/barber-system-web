@@ -1,4 +1,4 @@
-import "./style.css"
+import "./AppointmentFormModal.css"
 import { AuthContext } from "../../contexts/AuthProvider"
 import { useContext } from "react"
 

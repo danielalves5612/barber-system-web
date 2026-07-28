@@ -1,6 +1,6 @@
 import AppointmentRow from "../AppointmentRow"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import "./style.css"
+import "./AppointmentsTable.css"
 
 function AppointmentsTable({
     arrayPages,

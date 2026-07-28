@@ -1,5 +1,5 @@
 import formatters from "../../utils/formatters"
-import "./style.css"
+import "./AppointmentViewModal.css"
 
 function AppointmentViewModal({ viewAppointment, setViewAppointment}){
     return (
